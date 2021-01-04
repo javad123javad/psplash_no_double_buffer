@@ -53,7 +53,7 @@ void
 psplash_fb_destroy (PSplashFB *fb);
 
 PSplashFB*
-psplash_fb_new (int angle, int fbdev_id);
+psplash_fb_new (int angle, int fbdev_id, bool en_double_buffering);
 
 void
 psplash_fb_draw_rect (PSplashFB    *fb, 

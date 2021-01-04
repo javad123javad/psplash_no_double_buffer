@@ -131,7 +131,7 @@ attempt_to_change_pixel_format (PSplashFB *fb,
 }
 
 PSplashFB*
-psplash_fb_new (int angle, int fbdev_id)
+psplash_fb_new (int angle, int fbdev_id, bool double_buffering)
 {
   struct fb_var_screeninfo fb_var;
   struct fb_fix_screeninfo fb_fix;
@@ -196,7 +196,8 @@ psplash_fb_new (int angle, int fbdev_id)
     }
 
   /* Setup double virtual resolution for double buffering */
-  if (ioctl(fb->fd, FBIOPAN_DISPLAY, &fb_var) == -1) {
+  if ((ioctl(fb->fd, FBIOPAN_DISPLAY, &fb_var) == -1)
+		|| (double_buffering == FALSE) ) {
     fprintf(stderr, "FBIOPAN_DISPLAY not supported, double buffering disabled");
   } else {
     if (fb_var.yres_virtual == fb_var.yres * 2) {

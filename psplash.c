@@ -222,7 +222,12 @@ main (int argc, char** argv)
   int        pipe_fd, i = 0, angle = 0, fbdev_id = 0, ret = 0;
   PSplashFB *fb;
   bool       disable_console_switch = FALSE;
-
+  /* On some old VIA VGAs double buffering
+   *  cause tearing problems.
+   * 
+   */
+  bool       double_buffering = TRUE;
+  
   signal(SIGHUP, psplash_exit);
   signal(SIGINT, psplash_exit);
   signal(SIGQUIT, psplash_exit);
@@ -233,7 +238,11 @@ main (int argc, char** argv)
         disable_console_switch = TRUE;
         continue;
       }
-
+	if (!strcmp(argv[i],"-b") || !strcmp(argv[i],"--no-double-buffering"))
+      {
+        double_buffering = FALSE;
+        continue;
+      }
     if (!strcmp(argv[i],"-a") || !strcmp(argv[i],"--angle"))
       {
         if (++i >= argc) goto fail;
@@ -247,7 +256,7 @@ main (int argc, char** argv)
         fbdev_id = atoi(argv[i]);
         continue;
       }
-
+    
     fail:
       fprintf(stderr, 
               "Usage: %s [-n|--no-console-switch][-a|--angle <0|90|180|270>][-f|--fbdev <0..9>]\n", 
@@ -282,7 +291,7 @@ main (int argc, char** argv)
   if (!disable_console_switch)
     psplash_console_switch ();
 
-  if ((fb = psplash_fb_new(angle,fbdev_id)) == NULL)
+  if ((fb = psplash_fb_new(angle,fbdev_id, double_buffering)) == NULL)
     {
 	  ret = -1;
 	  goto fb_fail;
