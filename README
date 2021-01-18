@@ -6,7 +6,7 @@ For some old embedded systems (in my case G170 C7) double buffer doesn't work pr
 in order to disable double frame buffer, pass 'd' paramter with psplash.
 Based on your Init system modify either Psplash.sh (SysV) or related script in SystemD.
 Usage:
-psplash -d [Other Params]
+psplash -b [Other Params]
 =======
 PSplash is a userspace graphical boot splash screen for mainly
 embedded Linux devices supporting a 16bpp or 32bpp framebuffer. It has
